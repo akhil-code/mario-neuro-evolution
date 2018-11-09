@@ -10,7 +10,7 @@ from nes_py.wrappers import BinarySpaceToDiscreteSpaceEnv
 class Game:
     def __init__(self):
         # layers used for neural network
-        self.layers = (184320, 256, 256, 256, 256)
+        self.layers = (184320, 128, 128, 256)
         # initializing population for genetic algorithm
         self.population = Population(layers=self.layers)
         # initializing openai gym environment for cartpole game
@@ -30,12 +30,13 @@ class Game:
                 episode_length = 0
 
                 while not done and episode_length < self.episode_threshold:
-                    self.env.render()
+                    # self.env.render()
                     y = individual.nn.feed_forward(X)
                     X, reward, done, info = self.env.step(argmax(y))
                     individual.score += reward
                     episode_length += 1
                 
+                print(individual.score)
                 # save model when new high score is achieved
                 if individual.score > high_score:
                     data = {
